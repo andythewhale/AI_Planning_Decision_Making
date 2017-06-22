@@ -1,3 +1,5 @@
+#NOTE: I did not develop this code. This is just a good example to look at.
+
 from aimacode.logic import PropKB
 from aimacode.planning import Action
 from aimacode.search import (

@@ -1,0 +1,49 @@
+Ok so this project is HARD. There's a ton of stuff to learn and understand and I really do not get it.
+So I'm going to describe the AIMA code files we're given because I don't know what I'm limited by.
+
+LOGIC.PY:
+
+    pl_true          Evaluate a propositional logical sentence in a model
+    tt_entails       Say if a statement is entailed by a KB
+    pl_resolution    Do resolution on propositional sentences
+    dpll_satisfiable See if a propositional sentence is satisfiable
+    WalkSAT          Try to find a solution for a set of clauses
+    to_cnf           Convert to conjunctive normal form
+    unify            Do unification of two FOL sentences
+    diff, simp       Symbolic differentiation and simplification
+
+    *So that tells me nothing.
+
+    KB Class:
+        -KB is a knowledge base that you can tell and ask sentences""
+        -To create a KB, you subclass the KB class and implement tell, ask generator, and retract
+        -First order logic will return the first substitution or it will return false.
+        -There's tell, it adds a sentence to the KB
+        -There's ask, it returns a substitution that makes the query true, or returns false
+        -There's ask_generator, it yields all the substitutions that would make the query true
+        -There's retract, it removes sentence from KB
+
+    PropKB Class:
+        -Same thing except only returns true or false.
+        -Not efficient if you don't have any indexing.
+        -ask_generator yields the empty substitution {}
+
+    is_symbol:
+        -Takes in s.
+        -It is a symbol if it starts with an alphabetical character
+
+    is_var_symbol:
+        -takes in s.
+        -a logic variable symbol is an initial lower case string
+
+    is_prop_symbol:
+        -takes in s
+        -a proposition symbol is an initial upper case string
+
+    variable:
+        -return a set of variables in expression s.
+
+
+
+
+

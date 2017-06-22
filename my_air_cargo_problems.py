@@ -56,11 +56,45 @@ class AirCargoProblem(Problem):
 
         def load_actions():
             """Create all concrete Load actions and return a list
+            NOTE: Alright I'm sort of lost on how to set this up, initially.
+            NOTE: I think the best thing to do is to log my thinking process in finding a solution.
+            -So we get to import cargos, planes, airports, the initial state and the initial goal.
+            -So those are given and I have to do something with them.
+            -I'm going to also need to check out a bunch of the utility code that's given.
+            -I'm definitely going to have to understand symbolic code better so I'll go through som resources. (Ch11)
+
+
 
             :return: list of Action objects
             """
             loads = []
             # TODO create all load ground actions from the domain Load action
+            # So clearly there must be a good way to do this, does it matter which items are called first?
+            #I'm going to use the order least to greatest things, because I think it's the most efficient.
+            #So for each airport in our problem
+            for airport in self.airports
+                #For each airplane in our problem
+                for airplane in self.planes:
+                    #For each cargo in our problem
+                    for cargo in self.cargos:
+
+                        #It took me a million years to find expr in utils.
+                        #we need to make our preconditions first:
+                        #Our preconditions are the airplane and cargo being at this airport
+                        precond_pos = [expr("At(cargo, airport)"), expr("At(airplane, airport")]
+                        #There are no negating preconditions
+                        precond_neg = []
+                        #The effect is to add the cargo to the plane and remove the cargo from the airport
+                        effect_add = [expr("In(cargo, airplane)")]
+                        effect_rem = [expr("At(cargo, airport)")]
+
+                        #Now we need to do our action.
+                        load_action = Action(expr("Load(cargo, airplane, airport)"),
+                        [precond_pos, precond_neg], [effect_add, effect_rem])
+
+                        #append our action to our loads
+                        loads.append(load_action)
+            #return loads
             return loads
 
         def unload_actions():
