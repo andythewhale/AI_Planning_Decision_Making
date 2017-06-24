@@ -164,6 +164,58 @@ class AirCargoProblem(Problem):
         """
         # TODO implement
         possible_actions = []
+
+        # So in each current state we need to implement the possible actions for that state.
+        # I'm literally copying what we used for the cake problem. But I'll annotate it to understand it more.
+        # So KB is just a  knowledge base, and PropKB is just a subclass of that knowledge base.
+
+        # So first we call our subclass of KB. It uses propositional logic.
+        kb = PropKB()
+
+        # So we want to add the current state (tell) it to our kb.
+        # As you can see, goal test does this as well.
+        # pos_sentence() is something that occurs in the Fluent State Class.
+        # It returns a conjunctive sentence of the positive fluent.
+        # self.pos is the pos_list of actions that fluent state is initialized with.
+        kb.tell(decode_state(state, self.state_map).pos_sentence())
+
+        # for actions in the self.actions_list:
+        for action in self.actions_list:
+
+            # check if it's possible:
+
+            # Assume possible initially:
+            is_possible = True
+
+            # For each clause in the action.positive preconditions:
+            for clause in self.action.precond_pos:
+
+                # Check if the clause is in kb.clauses.
+                # If it isn't it is impossible.
+                # clauses is defined in lp_utils. It appends the pos and negative list to the clauses list.
+                if clause not in kb.clauses:
+
+                    #Can't be possible if it's not a clause of clauses:
+                    is_possible = False
+
+            #Same as last for loop except for the negative precondition, and if it's negative then it's not possible.
+            for clause in action.precond_neg:
+
+                #If it's false then it's not possible.
+                if clause in kb.clauses:
+                    is_possible = False
+
+                # If none of previous conditions are true then it is true.
+                if is_possible:
+                    possible_actions.append(action)
+
+            #And we do this for each action in the list and we return a list of pos actions.
+            return possible_actions
+
+
+
+
+
         return possible_actions
 
     def result(self, state: str, action: Action):
