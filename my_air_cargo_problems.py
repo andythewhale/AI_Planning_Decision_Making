@@ -82,15 +82,15 @@ class AirCargoProblem(Problem):
                         # It took me a million years to find expr in utils.
                         # we need to make our preconditions first:
                         # Our preconditions are the airplane and cargo being at this airport
-                        precond_pos = [expr("At(cargo, airport)"), expr("At(airplane, airport")]
+                        precond_pos = [expr("At({}, {}".format(cargo, airport)), expr("At({}, {}".format(airplane, airport))]
                         # There are no negating preconditions
                         precond_neg = []
                         # The effect is to add the cargo to the plane and remove the cargo from the airport
-                        effect_add = [expr("In(cargo, airplane)")]
-                        effect_rem = [expr("At(cargo, airport)")]
+                        effect_add = [expr("In({}, {}".format(cargo, airplane))]
+                        effect_rem = [expr("At({}, {}".format(cargo, airport))]
 
                         # Now we need to do our action.
-                        load_action = Action(expr("Load(cargo, airplane, airport)"),
+                        load_action = Action(expr("Load({}, {}, {}".format(cargo, airplaine, airport)),
                                              [precond_pos, precond_neg], [effect_add, effect_rem])
 
                         # append our action to our loads
@@ -142,8 +142,7 @@ class AirCargoProblem(Problem):
                 for to in self.airports:
                     if fr != to:
                         for p in self.planes:
-                            precond_pos = [expr("At({}, {})".format(p, fr)),
-                                           ]
+                            precond_pos = [expr("At({}, {})".format(p, fr))]
                             precond_neg = []
                             effect_add = [expr("At({}, {})".format(p, to))]
                             effect_rem = [expr("At({}, {})".format(p, fr))]
