@@ -69,6 +69,8 @@ class AirCargoProblem(Problem):
             """
             loads = []
             # TODO create all load ground actions from the domain Load action
+            # Did this all incorrectly by looking at the cake file.
+            # Hilariously corrected it after scrolling down to fly actions.
             # So clearly there must be a good way to do this, does it matter which items are called first?
             # I'm going to use the order least to greatest things, because I think it's the most efficient.
             # So for each airport in our problem
