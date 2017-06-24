@@ -210,12 +210,6 @@ class AirCargoProblem(Problem):
                     possible_actions.append(action)
 
             #And we do this for each action in the list and we return a list of pos actions.
-            return possible_actions
-
-
-
-
-
         return possible_actions
 
     def result(self, state: str, action: Action):
