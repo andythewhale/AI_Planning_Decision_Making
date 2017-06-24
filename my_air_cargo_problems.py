@@ -222,7 +222,38 @@ class AirCargoProblem(Problem):
         :return: resulting state after action
         """
         # TODO implement
+        # Again this is just from the have cake example. Which is fine. I'm just going to annotate it to understand it better
+
+        #Start with a new blank state. One for pos, one for neg.
         new_state = FluentState([], [])
+        #Let's figure out what our old state was.
+        old_state = decode_state(state, self.state_map)
+
+        #For each fluent in the old state positives:
+        for fluent in old_state.pos:
+            # If the state isn't available in the removed states then it is part of the new state.
+            if fluent not in action.effect_rem:
+                new_state.pos.append(fluent)
+
+        # For fluent in the add actions:
+        for fluent in action.effect_add:
+            #For each fluent in the added state. Add it to the new state.
+            if fluent in action.effect_add:
+                new_state.pos.append(fluent)
+
+        #Do the same thing above but for negatives.
+        for fluent in old_state.neg:
+            #For each fluent not in the added effect sate. Add it to the neg.
+            if fluent not in action.effect_add:
+                    new_state.neg.append(fluent)
+
+        #For the fluent in the removed effects
+        for fluent in action.rem:
+            #If the fluent is not already in the new neg state then add it.
+            if fluent not in new_state.neg:
+                new_state.append(fluent)
+
+        #return the new state.
         return encode_state(new_state, self.state_map)
 
     def goal_test(self, state: str) -> bool:
