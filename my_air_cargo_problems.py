@@ -74,23 +74,23 @@ class AirCargoProblem(Problem):
             # So clearly there must be a good way to do this, does it matter which items are called first?
             # I'm going to use the order least to greatest things, because I think it's the most efficient.
             # So for each airport in our problem
-            for airport in self.airports:
+            for a in self.airports:
                 # For each airplane in our problem
-                for airplane in self.planes:
+                for p in self.planes:
                     # For each cargo in our problem
-                    for cargo in self.cargos:
+                    for c in self.cargos:
                         # It took me a million years to find expr in utils.
                         # we need to make our preconditions first:
                         # Our preconditions are the airplane and cargo being at this airport
-                        precond_pos = [expr("At({}, {})".format(cargo, airport)), expr("At({}, {})".format(airplane, airport))]
+                        precond_pos = [expr("At({}, {})".format(c, a)), expr("At({}, {})".format(p, a))]
                         # There are no negating preconditions
                         precond_neg = []
                         # The effect is to add the cargo to the plane and remove the cargo from the airport
-                        effect_add = [expr("In({}, {})".format(cargo, airplane))]
-                        effect_rem = [expr("At({}, {})".format(cargo, airport))]
+                        effect_add = [expr("In({}, {})".format(c, p))]
+                        effect_rem = [expr("At({}, {})".format(c, a))]
 
                         # Now we need to do our action.
-                        load_action = Action(expr("Load({}, {}, {})".format(cargo, airplaine, airport)),
+                        load_action = Action(expr("Load({}, {}, {})".format(c, p, a)),
                                              [precond_pos, precond_neg], [effect_add, effect_rem])
 
                         # append our action to our loads
@@ -107,23 +107,23 @@ class AirCargoProblem(Problem):
             # TODO create all Unload ground actions from the domain Unload action
             # Literally just the opposite of loads.
             # For each airport in our problem
-            for airport in self.airports:
+            for a in self.airports:
                 # For each airplane in our problem
-                for airplane in self.planes:
+                for p in self.planes:
                     # For each cargo in our problem
-                    for cargo in self.cargos:
+                    for c in self.cargos:
                         # It took me a million years to find expr in utils.
                         # we need to make our preconditions first:
                         # Our preconditions are the cargo being in the plane and thd plane being at the airport
-                        precond_pos = [expr("In({}, {})".format(cargo, airplane)), expr("At({}, {}".format(airplane, airport))]
+                        precond_pos = [expr("In({}, {})".format(cargo, p)), expr("At({}, {}".format(p, a))]
                         # There are no negating preconditions
                         precond_neg = []
                         # The effect is to add the cargo to the plane and remove the cargo from the airport
-                        effect_add = [expr("At({}, {})".format(cargo, airport))]
-                        effect_rem = [expr("In({}, {})".format(cargo, airplane))]
+                        effect_add = [expr("At({}, {})".format(c, a))]
+                        effect_rem = [expr("In({}, {})".format(c, p))]
 
                         # Now we need to do our action.
-                        unload_action = Action(expr("Unload({}, {}, {})".format(cargo, airplane, airport)),
+                        unload_action = Action(expr("Unload({}, {}, {})".format(c, p, a)),
                                              [precond_pos, precond_neg], [effect_add, effect_rem])
 
                         # append our action to our loads
