@@ -326,19 +326,20 @@ class PlanningGraph():
         # Then we can iterate through our actions:
         for action in actions:
 
-            # Check out the node action using the PgNodeA class.
+            # Check out the node action using the PgNodeA class (inherits from pgNode)
             node_action = PgNode_a(action)
 
             # So if the node's action is included as a subset im the state level...
-            if node_action.prenodes.issubset(previous_s_level):
+            if node_action.prenodes.issubset(s_current):
 
-                #Then iterate through the previous s_level:
-                for node_state in previous_s_level:
+                #Then iterate through the current state...
+                for node_state in s_current:
 
-                    #add the action node as a child to the node state.
+                    #Now it's ez pz,
+                    # add the action node as a child to the node state.
                     node_state.children.add(node_action)
 
-                    #add the state node as a parent to the node action.
+                    # add the state node as a parent to the node action.
                     node_action.parents.add(node_state)
 
                 #Then add these node actions to the current action level
@@ -367,6 +368,29 @@ class PlanningGraph():
         #   may be "added" to the set without fear of duplication.  However, it is important to then correctly create and connect
         #   all of the new S nodes as children of all the A nodes that could produce them, and likewise add the A nodes to the
         #   parent sets of the S nodes
+
+        # The first thing we need to do is look at the action level behind us
+        a_past = self.a_levels[levels - 1]
+
+        # Now for each action in the previous levels action...
+        for action in a_past:
+
+          # For each effect of that action (the effect is like the new state) ...
+            for effect in a_past.effnodes:
+
+                # We just do what we did before and set them as their parent child relationship.
+                # The effect is the child of the action node.
+                action.children.add(effect)
+
+                #The past action is the parent of the effect node.
+                effect.parents.add(action)
+
+                #And now we just create the new node for the current level.
+                self.s_levels[level].add(effect)
+
+
+
+
 
     def update_a_mutex(self, nodeset):
         """ Determine and update sibling mutual exclusion for A-level nodes
