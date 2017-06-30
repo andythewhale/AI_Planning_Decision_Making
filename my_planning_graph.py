@@ -391,7 +391,7 @@ class PlanningGraph():
 
 
 
-
+    #NOTE: This looks hard, review this.
     def update_a_mutex(self, nodeset):
         """ Determine and update sibling mutual exclusion for A-level nodes
 
@@ -449,7 +449,29 @@ class PlanningGraph():
         :return: bool
         """
         # TODO test for Inconsistent Effects between nodes
-        return False
+        # So the big thing here is that we're checking out 2 nodes.
+        # We just have to see if they negate each other.
+        #Also a big thing that's confusing...
+        #Mutex is defined by a nodes adds being negated by another nodes remove.
+
+        #Automatically false.
+        bool = False
+
+        # So if node 1's actions (set) conflict with node 2 actions...
+        if set(node_a1.action.effect_add) == set(node_a2.action.effect_rem):
+
+            #Then this is a mutex:
+            bool = True
+
+        #Ok so check rem and add on the other parts of a1 and a2
+        if set(node_a1.action.effect_rem) == set(node_a2.action.effect_add):
+
+            #If true then bool is true.
+            bool = True
+
+        # Return final bool
+        return bool
+
 
     def interference_mutex(self, node_a1: PgNode_a, node_a2: PgNode_a) -> bool:
         """
