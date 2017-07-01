@@ -531,7 +531,28 @@ class PlanningGraph():
         """
 
         # TODO test for Competing Needs between nodes
-        return False
+
+        # So this is to checkout if 2 nodes have competing needs
+        # So this is for 2 actions that have matching preconditions
+        # It's a good thing ww have the is_mutex function for this.
+
+        # Assume false initially
+        bool = false
+
+        # So for each parent we have in the first node
+        for parent_one in node_a1.parents:
+
+            # So for each parent we have in the second node
+            for parent_two in node_a2.parents:
+
+                # If they're a mutex of each other
+                if parent_one.is_mutex(parent_two):
+                    bool = True
+
+        return bool
+
+
+
 
     def update_s_mutex(self, nodeset: set):
         """ Determine and update sibling mutual exclusion for S-level nodes
