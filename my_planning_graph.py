@@ -451,8 +451,8 @@ class PlanningGraph():
         # TODO test for Inconsistent Effects between nodes
         # So the big thing here is that we're checking out 2 nodes.
         # We just have to see if they negate each other.
-        #Also a big thing that's confusing...
-        #Mutex is defined by a nodes adds being negated by another nodes remove.
+        # Also a big thing that's confusing...
+        # Mutex is defined by a nodes adds being negated by another nodes remove.
 
         #Automatically false.
         bool = False
@@ -463,10 +463,10 @@ class PlanningGraph():
             #Then this is a mutex:
             bool = True
 
-        #Ok so check rem and add on the other parts of a1 and a2
+        # Ok so check rem and add on the other parts of a1 and a2
         if set(node_a1.action.effect_rem) == set(node_a2.action.effect_add):
 
-            #If true then bool is true.
+            # If true then bool is true.
             bool = True
 
         # Return final bool
@@ -488,7 +488,36 @@ class PlanningGraph():
         :return: bool
         """
         # TODO test for Interference between nodes
-        return False
+
+        # This function is checking for interference.
+        # Interference is when the outcome of one action is a pre-condition of another action.
+
+        # So the first thing we do is to state that the bool is false
+        # We're going to assume that there is no mutex until there is one.
+        bool = False
+
+        # Check for node 1 effects with node 2 preconditions
+        if (set(node_a1.action.effect_add) and set(node_a2.action.precond_neg)) or (
+            set(node_a1.action.effect_rem) and set(node_a2.action.precond_pos)):
+
+            # Then there's an exception
+            bool = True
+
+        # Now we just check the node 2 with the preconditions in node 1
+        # It's the same thing as the above except I replaced nodes.
+        if (set(node_a2.action.effect_add) and set(node_a1.action.precond_neg)) or (
+            set(node_a2.action.effect_rem) and set(node_a1.action.precond_pos)):
+
+            # Then there's an exception
+            bool = True
+
+        # Return our answer
+        return bool
+
+
+
+
+
 
     def competing_needs_mutex(self, node_a1: PgNode_a, node_a2: PgNode_a) -> bool:
         """
