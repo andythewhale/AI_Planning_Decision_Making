@@ -548,7 +548,8 @@ class PlanningGraph():
                 # If they're a mutex of each other
                 if parent_one.is_mutex(parent_two):
                     bool = True
-
+                    
+        # Return the bool..
         return bool
 
 
