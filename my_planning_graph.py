@@ -548,7 +548,7 @@ class PlanningGraph():
                 # If they're a mutex of each other
                 if parent_one.is_mutex(parent_two):
                     bool = True
-                    
+
         # Return the bool..
         return bool
 
@@ -588,7 +588,10 @@ class PlanningGraph():
         :return: bool
         """
         # TODO test for negation between nodes
-        return False
+
+        # This is the same thing as competing needs function but it's based on the negation.
+        # But there's no negation object so I'm confused.
+
 
     def inconsistent_support_mutex(self, node_s1: PgNode_s, node_s2: PgNode_s):
         """
@@ -607,7 +610,19 @@ class PlanningGraph():
         :return: bool
         """
         # TODO test for Inconsistent Support between nodes
-        return False
+        # From the above, we're testing for mutual exclusion.
+        # More things:
+
+        bool = True
+
+        for parent_one in node_s1.parents:
+            for parent_dos in node_s2.parents:
+                if not parent_one.is_mutex(parent_dos):
+                    bool = False
+        return bool
+
+
+
 
     def h_levelsum(self) -> int:
         """The sum of the level costs of the individual goals (admissible if goals independent)
