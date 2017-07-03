@@ -591,6 +591,15 @@ class PlanningGraph():
 
         # This is the same thing as competing needs function but it's based on the negation.
         # But there's no negation object so I'm confused.
+        # But this is easier than I made it out to be.
+        # For bool to return to true they both need the same symbol.
+        # They also need to not be the same positive or negative.
+
+        # Expression of the above statement if these are both true then the bool is true.
+        bool = False
+        if node_s1.symbol == node_s2.symbol and node_s1.is_pos != node_s2.is_pos:
+            bool = True
+        return bool
 
 
     def inconsistent_support_mutex(self, node_s1: PgNode_s, node_s2: PgNode_s):
@@ -611,7 +620,7 @@ class PlanningGraph():
         """
         # TODO test for Inconsistent Support between nodes
         # From the above, we're testing for mutual exclusion.
-        # More things:
+        # So we just need to make sure that the parents are not the same.
 
         # Initially assume false.
         bool = False
