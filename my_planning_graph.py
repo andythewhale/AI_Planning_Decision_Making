@@ -613,12 +613,20 @@ class PlanningGraph():
         # From the above, we're testing for mutual exclusion.
         # More things:
 
-        bool = True
+        # Initially assume false.
+        bool = False
 
+        # So for each parent in the first nodes list of parents:
         for parent_one in node_s1.parents:
+
+            # And for each parent in the list of parents for the second node:
             for parent_dos in node_s2.parents:
-                if not parent_one.is_mutex(parent_dos):
-                    bool = False
+
+                #If they're a mutex of each other then change the bool to true.
+                if parent_one.is_mutex(parent_dos):
+                    bool = True
+
+        # Return outcome
         return bool
 
 
