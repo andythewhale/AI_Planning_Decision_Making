@@ -639,6 +639,25 @@ class PlanningGraph():
         return bool
 
 
+    def cost_of_level(self, goal_state) -> int:
+        """
+        -This function determines the cost of each level
+        -It takes in the self object and the goal_state object
+        -It outputs the cost of each level
+        """
+
+        # Enumerate the cost at the level on the self object for the states
+        for cost, level in enumerate(self.s_levels):
+
+            # For each state in the level
+            for state in level:
+
+                # If the literal is a goal state
+                if state.literal == goal_state:
+
+                    # Enumerate uses a 0 index so add 1 and return
+                    return cost + 1
+
 
 
     def h_levelsum(self) -> int:
@@ -647,6 +666,22 @@ class PlanningGraph():
         :return: int
         """
         level_sum = 0
+
         # TODO implement
-        # for each goal in the problem, determine the level cost, then add them together
+        # For each goal in the problem, determine the level cost, then add them together
+        # So the idea behind this is really straight forward.
+        # We're just adding the cost of each level.
+        # So the first thing we need to do is to determine the cost at each level.
+        # But we also need something that checks for goals.
+        # Goal check doesn't need a function though. There is one given.
+        # See above function
+
+        # So for each goal_state we have in the problem goal
+        for goal_state in self.problem.goal:
+
+            # The level sum is just equal to
+            level_sum += self.cost_of_level(goal_state)
+
+        # Return the level sum
         return level_sum
+
