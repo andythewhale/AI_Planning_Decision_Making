@@ -307,9 +307,17 @@ class AirCargoProblem(Problem):
 
         #Literally copied from example_have_cake.py
         #Just with a counter.
+
+        # So for each clause in self.goal
         for clause in self.goal:
+
+            # If the clause isn't in the knowledge base clauses set
             if clause not in kb.clauses:
+
+                #Increase the count
                 count = count + 1
+
+        # Return the count
         return count
 
 
