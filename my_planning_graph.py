@@ -315,6 +315,7 @@ class PlanningGraph():
         # The point of this function is to output the possible action levels we can take.
         # Much of this is very hard. Until you view the available functions
         # NOTE: Look immediately below the call for the Planning Graph class. (__init__)
+        # NOTE: I initially forgot to call set on the actions and this confused me for a long time.
 
         # Where are we?
         # This is our s - i level / state whatever
@@ -322,6 +323,9 @@ class PlanningGraph():
 
         # So from here we can use all actions to get all of our actions.
         actions = self.all_actions
+
+        # Need to call set here or we will be out of range when we add the  node_action
+        self.a_levels.append(set())
 
         # Then we can iterate through our actions:
         for action in actions:
@@ -364,19 +368,24 @@ class PlanningGraph():
         # 1. determine what literals to add
         # 2. connect the nodes
         # for example, every A node in the previous level has a list of S nodes in effnodes that represent the effect
-        #   produced by the action.  These literals will all be part of the new S level.  Since we are working with sets, they
-        #   may be "added" to the set without fear of duplication.  However, it is important to then correctly create and connect
-        #   all of the new S nodes as children of all the A nodes that could produce them, and likewise add the A nodes to the
-        #   parent sets of the S nodes
+        # produced by the action.  These literals will all be part of the new S level.  Since we are working with sets, they
+        # may be "added" to the set without fear of duplication.  However, it is important to then correctly create and connect
+        # all of the new S nodes as children of all the A nodes that could produce them, and likewise add the A nodes to the
+        # parent sets of the S nodes
+        # NOTE: That set is needed here as well, but I'm not 100% sure why.
+
 
         # The first thing we need to do is look at the action level behind us
-        a_past = self.a_levels[levels - 1]
+        a_past = self.a_levels[level - 1]
+
+        # Need to call set here or we will be out of range when we add the  node_action
+        self.s_levels.append(set())
 
         # Now for each action in the previous levels action...
         for action in a_past:
 
           # For each effect of that action (the effect is like the new state) ...
-            for effect in a_past.effnodes:
+            for effect in action.effnodes:
 
                 # We just do what we did before and set them as their parent child relationship.
                 # The effect is the child of the action node.
@@ -537,7 +546,7 @@ class PlanningGraph():
         # It's a good thing ww have the is_mutex function for this.
 
         # Assume false initially
-        bool = false
+        bool = False
 
         # So for each parent we have in the first node
         for parent_one in node_a1.parents:
@@ -623,7 +632,7 @@ class PlanningGraph():
         # So we just need to make sure that the parents are not the same.
 
         # Initially assume false.
-        bool = False
+        #bool = False
 
         # So for each parent in the first nodes list of parents:
         for parent_one in node_s1.parents:
@@ -632,34 +641,12 @@ class PlanningGraph():
             for parent_dos in node_s2.parents:
 
                 #If they're a mutex of each other then change the bool to true.
-                if parent_one.is_mutex(parent_dos):
-                    bool = True
-
+                if not parent_one.is_mutex(parent_dos):
+                    return False
+                    #bool = True
         # Return outcome
-        return bool
-
-
-    def cost_of_level(self, goal_state) -> int:
-        """
-        -This function determines the cost of each level
-        -It takes in the self object and the goal_state object
-        -It outputs the cost of each level
-        """
-
-        # Enumerate the cost at the level on the self object for the states
-        for cost, level in enumerate(self.s_levels):
-
-            # For each state in the level
-            for state in level:
-
-                # If the literal is a goal state
-                if state.literal == goal_state:
-
-                    # Enumerate uses a 0 index so add 1 and return
-                    return cost + 1
-
-
-
+        #bool = False
+        return True
     def h_levelsum(self) -> int:
         """The sum of the level costs of the individual goals (admissible if goals independent)
 
@@ -671,17 +658,34 @@ class PlanningGraph():
         # For each goal in the problem, determine the level cost, then add them together
         # So the idea behind this is really straight forward.
         # We're just adding the cost of each level.
-        # So the first thing we need to do is to determine the cost at each level.
-        # But we also need something that checks for goals.
-        # Goal check doesn't need a function though. There is one given.
-        # See above function
 
-        # So for each goal_state we have in the problem goal
-        for goal_state in self.problem.goal:
+        # So the first thing we need is to know each state
+        states = self.s_levels
 
-            # The level sum is just equal to
-            level_sum += self.cost_of_level(goal_state)
+        # The next thing we need to know is what the goals are:
+        goal_states = self.problem.goal
+
+        # So for each goal in our problem's goals
+        for goal in goal_states:
+
+            # We need to figure out the node that matches this
+            # So we ask for the goal and the True to indicate pos.
+            goal_state = PgNode_s(goal, True)
+
+            # We need to figure out the cost based on the states
+            # So we can enumerate and use the counter as the cost.
+            for cost, state in enumerate(states):
+
+                # If the goal state is our state
+                if goal_state in state:
+
+                    # Then the level sum is increased based on the cost
+                    # Our cost is 0 indexed so we add 1 to it.
+                    level_sum = level_sum + cost
+
+                    # Need break to make the test pass. I was missing this for a long time.
+                    # It is really is good that the test checks for this otherwise I would have missed it.
+                    break
 
         # Return the level sum
         return level_sum
-
