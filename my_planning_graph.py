@@ -81,6 +81,7 @@ class PgNode_s(PgNode):
         :return:
             print only
         """
+
         if self.is_pos:
             print("\n*** {}".format(self.symbol))
         else:
@@ -200,7 +201,7 @@ def mutexify(node1: PgNode, node2: PgNode):
 class PlanningGraph():
     """
     A planning graph as described in chapter 10 of the AIMA text. The planning
-    graph can be used to reason about 
+    graph can be used to reason about
     """
 
     def __init__(self, problem: Problem, state: str, serial_planning=True):
@@ -307,9 +308,9 @@ class PlanningGraph():
         # 1. determine what actions to add and create those PgNode_a objects
         # 2. connect the nodes to the previous S literal level
         # for example, the A0 level will iterate through all possible actions for the problem and add a PgNode_a to a_levels[0]
-        #   set iff all prerequisite literals for the action hold in S0.  This can be accomplished by testing
-        #   to see if a proposed PgNode_a has prenodes that are a subset of the previous S level.  Once an
-        #   action node is added, it MUST be connected to the S node instances in the appropriate s_level set.
+        # set if all prerequisite literals for the action hold in S0. This can be accomplished by testing
+        # to see if a proposed PgNode_a has prenodes that are a subset of the previous S level.  Once an
+        # action node is added, it MUST be connected to the S node instances in the appropriate s_level set.
 
         # The point of this function is to take in the current level / state we're at.
         # The point of this function is to output the possible action levels we can take.
@@ -318,7 +319,7 @@ class PlanningGraph():
         # NOTE: I initially forgot to call set on the actions and this confused me for a long time.
 
         # Where are we?
-        # This is our s - i level / state whatever
+        # This is our s - i level / state
         s_current = self.s_levels[level]
 
         # So from here we can use all actions to get all of our actions.
@@ -339,7 +340,7 @@ class PlanningGraph():
                 #Then iterate through the current state...
                 for node_state in s_current:
 
-                    #Now it's ez pz,
+                    # Now it's ez pz,
                     # add the action node as a child to the node state.
                     node_state.children.add(node_action)
 
@@ -367,9 +368,9 @@ class PlanningGraph():
         # TODO add literal S level to the planning graph as described in the Russell-Norvig text
         # 1. determine what literals to add
         # 2. connect the nodes
-        # for example, every A node in the previous level has a list of S nodes in effnodes that represent the effect
-        # produced by the action.  These literals will all be part of the new S level.  Since we are working with sets, they
-        # may be "added" to the set without fear of duplication.  However, it is important to then correctly create and connect
+        # For example, every A node in the previous level has a list of S nodes in effnodes that represent the effect
+        # produced by the action. These literals will all be part of the new S level. Since we are working with sets, they
+        # may be "added" to the set without fear of duplication. However, it is important to then correctly create and connect
         # all of the new S nodes as children of all the A nodes that could produce them, and likewise add the A nodes to the
         # parent sets of the S nodes
         # NOTE: That set is needed here as well, but I'm not 100% sure why.
@@ -484,7 +485,7 @@ class PlanningGraph():
 
     def interference_mutex(self, node_a1: PgNode_a, node_a2: PgNode_a) -> bool:
         """
-        Test a pair of actions for mutual exclusion, returning True if the 
+        Test a pair of actions for mutual exclusion, returning True if the
         effect of one action is the negation of a precondition of the other.
 
         HINT: The Action instance associated with an action node is accessible
@@ -647,6 +648,7 @@ class PlanningGraph():
         # Return outcome
         #bool = False
         return True
+
     def h_levelsum(self) -> int:
         """The sum of the level costs of the individual goals (admissible if goals independent)
 
@@ -681,7 +683,7 @@ class PlanningGraph():
 
                     # Then the level sum is increased based on the cost
                     # Our cost is 0 indexed so we add 1 to it.
-                    level_sum = level_sum + cost
+                    level_sum += cost
 
                     # Need break to make the test pass. I was missing this for a long time.
                     # It is really is good that the test checks for this otherwise I would have missed it.
